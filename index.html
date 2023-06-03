@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Página Estática con Socket.IO</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+</head>
+<body>
+  <h1>Página Estática con Socket.IO</h1>
+
+  <script>
+    // Conexión al servidor de socket.io con encabezado de autorización
+    const socket = io('https://kiwibot-technical-test.onrender.com/', {
+      auth: {
+        headers: {
+          authorization: 'RBT6398'
+        }
+      }
+    });
+
+    // Escuchar el evento "heartbeat"
+    socket.on('heartbeat', (data) => {
+      const ticketId = data.ticket_id;
+
+      // Construir el objeto heartbeat
+      const heartbeatData = {
+        bot_id: "RBT6398",
+        timestamp: new Date().toISOString(),
+        location: {
+          lat: 37.7749,
+          lon: -122.4194
+        },
+        status: "busy",
+        battery_level: 20.5,
+        software_version: "1.2.3",
+        hardware_version: "2.0"
+      };
+
+      // Emitir un mensaje de respuesta con el evento "heartbeatAnswer"
+      socket.emit('heartbeatAnswer', { ticket_id: ticketId, heartbeat: heartbeatData });
+
+      // Mostrar una alerta cuando se envía el mensaje de respuesta
+      alert('Mensaje enviado');
+    });
+  </script>
+</body>
+</html>
